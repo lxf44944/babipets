@@ -11,7 +11,7 @@ class PostList(ListAPIView):
             'code': 200,
             'message': 'ok',
             'data':{
-                'Item':[]
+                'Item':{}
             }
         }
         serializer = PostsSerializer(queryset, many = False)
