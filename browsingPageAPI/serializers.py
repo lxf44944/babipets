@@ -7,10 +7,10 @@ class UsersSerializer(serializers.ModelSerializer):
         fields = ['user_id', 'avatar_url', 'nickname', 'gender']
 
 class PostsSerializer(serializers.ModelSerializer):
-    usersId = serializers.IntegerField(source = 'Users.user_id')
-    usersHeadUrl = serializers.URLField(source = 'Users.avatar_url')
-    usersName = serializers.CharField(source = 'Users.nickname')
-    usersGender = serializers.IntegerField(source = 'Users.gender')
+    usersId = serializers.IntegerField(read_only = True,source = 'Users.user_id')
+    usersHeadUrl = serializers.URLField(read_only = True,source = 'Users.avatar_url')
+    usersName = serializers.CharField(read_only = True,source = 'Users.nickname')
+    usersGender = serializers.IntegerField(read_only = True,source = 'Users.gender')
     class Meta:
         model = Posts
         fields = ['usersId', 'usersHeadUrl', 'usersName', 'usersGender', 'post_id', 'post_desc', 'post_media_type', 'post_media_urls', 'post_like_num', 'post_share_num']

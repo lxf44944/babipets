@@ -4,6 +4,6 @@ from browsingPageAPI import views
 from django.urls import path
 
 urlpatterns = [
-    path('browsingPageAPI/', views.Browse.as_view(), name = 'browse-page'),
-    path('browsingPageAPI/<int:pk>/', views.Browse.as_view()),
+    path('home/list.json', views.Browse.as_view(), name = 'browse-page'),
+    #path('browsingPageAPI/<int:pk>/', views.Browse.as_view()),
 ]

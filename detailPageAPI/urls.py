@@ -4,5 +4,5 @@ from detailPageAPI import views
 from django.urls import path
 
 urlpatterns = [
-    path('detailPageAPI/', views.PostList.as_view(), name = 'detail-page'),
+    path('home/info.json', views.PostList.as_view(), name = 'detail-page'),
 ]

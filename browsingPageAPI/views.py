@@ -4,7 +4,7 @@ from .serializers import PostsSerializer
 from rest_framework.decorators import api_view
 from .models import Posts
 from rest_framework import permissions
-
+from rest_framework.response import Response
 
 class Browse(GenericAPIView):
     serializer_class = PostsSerializer
@@ -29,4 +29,4 @@ class Browse(GenericAPIView):
             'message': 'ok',
             'data': data
         }
-        return Response(data) # return Response(payload) ???
+        return Response(payload) # return Response(payload) ???
