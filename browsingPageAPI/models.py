@@ -159,7 +159,7 @@ class Posts(models.Model):
     user_client = models.IntegerField(blank=True, null=True)
     post_desc = models.CharField(max_length=200, blank=True, null=True)
     post_media_type = models.IntegerField(blank=True, null=True)
-    post_media_urls = models.TextField(blank=True, null=True)  # This field type is a guess.
+    post_media_urls = []  # This field type is a guess.
     post_like_num = models.IntegerField(blank=True, null=True)
     post_share_num = models.IntegerField(blank=True, null=True)
     deleted = models.IntegerField(blank=True, null=True)
