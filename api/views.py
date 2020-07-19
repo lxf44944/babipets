@@ -11,6 +11,10 @@ from .models import Posts
 from rest_framework import permissions
 from rest_framework.response import Response
 
+
+from demo.sts_demo import getKey
+import os
+
 class List(GenericAPIView):
     serializer_class = PostsSerializer
     queryset = Posts.objects.all()
@@ -62,6 +66,7 @@ class add(APIView):
         serializer = CreateSerializer(data = request.data)
         if serializer.is_valid():
             new = serializer.save()
+            #data = serializer.data.post_id
             payload = {
                 "code": 200,
                 "message": "ok",
@@ -73,3 +78,21 @@ class add(APIView):
             }
             return Response(payload)
         return Response(serializer.errors)
+
+class secret(APIView):
+    def post(self, request):
+        os.environ['COS_SECRET_ID'] = 'AKIDamh93ecLU98rKsaYTBZonSqywaS3323i'
+        os.environ['COS_SECRET_KEY'] = 'gCdvtCF3ZouyeHNK1FrEMFqZ36twjESO'
+        data = getKey()
+        payload = {
+            "code": 200,
+            "message": "ok",
+            "data":{
+                "Item":{
+                    "tmpSecretId":data['credentials']['tmpSecretId'],
+                    "tmpSecretKey":data['credentials']['tmpSecretKey'],
+                    "sessionToken":data['credentials']['sessionToken']
+                }
+            }
+        }
+        return Response(payload)
