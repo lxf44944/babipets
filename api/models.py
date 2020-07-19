@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django_mysql.models import JSONField
 
 
 class Actions(models.Model):
@@ -131,7 +132,7 @@ class DjangoSession(models.Model):
 
 
 class Users(models.Model):
-    user_id = models.BigIntegerField(primary_key=True)
+    user_id = models.AutoField(primary_key=True)
     openid = models.BigIntegerField(blank=True, null=True)
     nickname = models.CharField(max_length=20, blank=True, null=True)
     avatar_url = models.CharField(max_length=60, blank=True, null=True)
@@ -152,14 +153,14 @@ class Users(models.Model):
 
 
 class Posts(models.Model):
-    post_id = models.BigIntegerField(primary_key=True)
+    post_id = models.AutoField(primary_key=True)
     create_time = models.DateTimeField(blank=True, null=True)
     update_time = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(Users, on_delete = models.CASCADE)
     user_client = models.IntegerField(blank=True, null=True)
     post_desc = models.CharField(max_length=200, blank=True, null=True)
     post_media_type = models.IntegerField(blank=True, null=True)
-    post_media_urls = []  # This field type is a guess.
+    post_media_urls = JSONField(blank=True, null=True)
     post_like_num = models.IntegerField(blank=True, null=True)
     post_share_num = models.IntegerField(blank=True, null=True)
     deleted = models.IntegerField(blank=True, null=True)
