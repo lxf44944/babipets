@@ -8,6 +8,7 @@ urlpatterns = [
     path('home/info.json', views.Info.as_view(), name = 'info'),
     path('post/add.json', views.add.as_view(), name = 'add'),
     path('post/secret.json', views.secret.as_view(), name = 'secret'),
-
-    #path('browsingPageAPI/<int:pk>/', views.Browse.as_view()),
+    path('user/login.json', views.login.as_view(), name = 'login'),
+    path('user/edit.json', views.edit.as_view(), name = 'edit'),
+    path('user/history.json', views.history.as_view(), name = 'history'),
 ]

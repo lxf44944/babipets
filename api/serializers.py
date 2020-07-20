@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import Posts
+from .models import Posts, Users
 
 
 class PostsSerializer(serializers.ModelSerializer):
@@ -33,3 +33,28 @@ class CreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Posts
         fields = ['postDesc', 'postMediaType', 'postMediaUrls', 'currentUserId', 'userClient']
+
+class UserSerializer(serializers.ModelSerializer):
+    openId = serializers.CharField(source = 'openid')
+    nickName = serializers.CharField(source = 'nickname')
+    avatarUrl = serializers.CharField(source = 'avatar_url')
+    gender = serializers.IntegerField()
+    country = serializers.CharField()
+    province = serializers.CharField()
+    city = serializers.CharField()
+    language = serializers.CharField()
+    userClient = serializers.IntegerField(source = 'user_client')
+
+    class Meta:
+        model = Users
+        fields = ['openId', 'nickName', 'avatarUrl', 'gender', 'country', 'province', 'city', 'language', 'userClient']
+
+class EditUserSerializer(serializers.ModelSerializer):
+
+    userDesc = serializers.CharField(source = 'user_desc')
+    currentUserId = serializers.IntegerField(source = 'user_id')
+    userClient = serializers.IntegerField(source = 'user_client')
+
+    class Meta:
+        model = Users
+        fields = ['userDesc', 'currentUserId', 'userClient']
