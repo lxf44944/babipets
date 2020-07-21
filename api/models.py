@@ -47,3 +47,15 @@ class Posts(models.Model):
     class Meta:
         managed = False
         db_table = 'Posts'
+
+class Actions(models.Model):
+    action_id = models.BigAutoField(primary_key=True)
+    post = models.ForeignKey(Posts, on_delete = models.CASCADE)
+    activity_time = models.DateTimeField(blank=True, null=True)
+    like = models.IntegerField(blank=True, null=True)
+    share = models.IntegerField(blank=True, null=True)
+    user = models.ForeignKey(Users, on_delete = models.CASCADE)
+
+    class Meta:
+        managed = False
+        db_table = 'Actions'

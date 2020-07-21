@@ -11,4 +11,6 @@ urlpatterns = [
     path('user/login.json', views.login.as_view(), name = 'login'),
     path('user/edit.json', views.edit.as_view(), name = 'edit'),
     path('user/history.json', views.history.as_view(), name = 'history'),
+    path('post/like.json', views.like.as_view(), name = 'like'),
+    path('post/share.json', views.share.as_view(), name = 'share'),
 ]

@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
-from .models import Posts, Users
-
+from .models import Posts, Users, Actions
+import datetime
 
 class PostsSerializer(serializers.ModelSerializer):
     # 通过外键user获取发帖用户相关信息
@@ -58,3 +58,25 @@ class EditUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = ['userDesc', 'currentUserId', 'userClient']
+
+class LikeSerializer(serializers.ModelSerializer):
+    postId = serializers.IntegerField(source = 'post_id')
+    activity_time = serializers.DateField(default = datetime.datetime.now)
+    like = serializers.IntegerField(default = 1)
+    share = serializers.IntegerField(default = 0)
+    currentUserId = serializers.IntegerField(source = 'user_id')
+
+    class Meta:
+        model = Actions
+        fields = ['postId', 'activity_time', 'like', 'share', 'currentUserId']
+
+class ShareSerializer(serializers.ModelSerializer):
+    postId = serializers.IntegerField(source = 'post_id')
+    activity_time = serializers.DateField(default = datetime.datetime.now)
+    like = serializers.IntegerField(default = 0)
+    share = serializers.IntegerField(default = 1)
+    currentUserId = serializers.IntegerField(source = 'user_id')
+
+    class Meta:
+        model = Actions
+        fields = ['postId', 'activity_time', 'like', 'share', 'currentUserId']

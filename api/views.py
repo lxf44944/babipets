@@ -1,13 +1,13 @@
 from rest_framework.generics import GenericAPIView
 from chongbao.pagination import CustomPagination
-from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer
+from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer, LikeSerializer, ShareSerializer
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 
 
 
-from .models import Posts, Users
+from .models import Posts, Users, Actions
 from rest_framework import permissions
 from rest_framework.response import Response
 
@@ -159,3 +159,29 @@ class history(GenericAPIView):
             'data': data
         }
         return Response(payload) # return Response(payload) ???
+
+class like(APIView):
+    def post(self, request):
+        serializer = LikeSerializer(data = request.data)
+        if serializer.is_valid():
+            newLike = serializer.save()
+            #data = serializer.data.post_id
+            payload = {
+                "code": 200,
+                "message": "ok",
+            }
+            return Response(payload)
+        return Response(serializer.errors)
+
+class share(APIView):
+    def post(self, request):
+        serializer = ShareSerializer(data = request.data)
+        if serializer.is_valid():
+            newLike = serializer.save()
+            #data = serializer.data.post_id
+            payload = {
+                "code": 200,
+                "message": "ok",
+            }
+            return Response(payload)
+        return Response(serializer.errors)
