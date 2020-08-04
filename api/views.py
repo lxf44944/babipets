@@ -185,3 +185,29 @@ class share(APIView):
             }
             return Response(payload)
         return Response(serializer.errors)
+
+class DefaultAutoView(View):
+    def get(self, request, *args, **kwargs):
+        auth_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={APPID}&redirect_uri={redirect_url}&response_type=code&scope=snsapi_base&state=123#wechat_redirect'
+        REDIRECT_URL = request.query_params.get('ROOT_URL') + reverse('login:get_openid')
+        auth_url = auth_url.format(appId = request.query_params.get('APPID'), redirect_url = quote(REDIRECT_URL))
+        return redirect(auth_url)
+
+def get_user_token(code, appId, secret):
+    request_url = 'https://api.weixin.qq.com/sns/oauth2/access_token?' \
+                      'appid={APPID}&secret={SECRET}&code={CODE}&grant_type=authorization_code'
+    request_url = request_url.format(APPID = appId, SECRET = secret, CODE = code)
+    data = requests.get(request_url)
+    return data.json()
+
+class SilenceGetOpenId(View):
+    def get(self, request, *args, **kwargs):
+        code = request.GET.get('code', '')
+        appId = request.query_params.get('APPID')
+        secret = request.query_params.get('SECRET')
+        if not code:
+            return HttpResponseBadRequest('请求错误')
+
+        data = get_user_token(code, ).json()
+        open_id = data.get('openid', '')
+        access_token = data.get('access_token', '')
