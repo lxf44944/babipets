@@ -13,5 +13,5 @@ urlpatterns = [
     path('user/history.json', views.history.as_view(), name = 'history'),
     path('post/like.json', views.like.as_view(), name = 'like'),
     path('post/share.json', views.share.as_view(), name = 'share'),
-    path('get/openid/', SilenceGetOpenId.as_view(), name = 'get_openid'),
+    path('get/openid/', views.SilenceGetOpenId.as_view(), name = 'get_openid'),
 ]
