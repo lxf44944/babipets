@@ -83,6 +83,9 @@ DATABASES = {
         'PASSWORD': 'WSS1997wss',
         'HOST': 'localhost',
         'PORT': '3306',
+        'OPTIONS': {
+            'read_default_file': os.path.join(BASE_DIR, 'my.cnf'),
+        },
     }
 }
 
