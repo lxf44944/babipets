@@ -118,6 +118,16 @@ USE_L10N = True
 USE_TZ = True
 
 
+# wechat appid, secret and root_url
+WEICHAT_AUTH = {
+    # weiChat appId:
+    'APPId': '*******',
+    #weiChat app secret:
+    'SECRET': '*******',
+    #callback url:
+    'ROOT_URL': 'http://********.com',
+}
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
