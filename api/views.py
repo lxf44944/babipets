@@ -1,6 +1,6 @@
 from rest_framework.generics import GenericAPIView
 from chongbao.pagination import CustomPagination
-from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer, LikeSerializer, ShareSerializer
+from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer, LikeSerializer, ShareSerializer, DeletePostSerializer
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView, View
@@ -22,6 +22,8 @@ class List(GenericAPIView):
     permission_classes = (permissions.AllowAny,)
     http_method_names = ['get', 'head']
     def get(self, request):
+        def filter_queryset(queryset):
+            return queryset.filter(deleted = 0)
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
 
@@ -45,6 +47,7 @@ class Info(GenericAPIView):
     queryset = Posts.objects.all()
     def get(self, request):
         def filter_queryset(queryset):
+            queryset = queryset.filter(deleted = 0)
             return queryset.filter(pk = request.query_params.get('postId'))
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many = True)
@@ -141,6 +144,7 @@ class history(GenericAPIView):
     http_method_names = ['get', 'head']
     def get(self, request):
         def filter_queryset(queryset):
+            queryset = queryset.filter(deleted = 0)
             return queryset.filter(user = request.query_params.get('userId'))
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
@@ -209,3 +213,21 @@ class SilenceGetOpenId(View):
         data = get_user_token(code).json()
         open_id = data.get('openid', '')
         access_token = data.get('access_token', '')
+
+
+
+#V0.2.1 Starts here:
+#Delete post API:
+class Delete(APIView):
+    def post(self, request):
+        obj = Posts.objects.get(post_id=request.data['postId'])
+        serializer = DelatePostSerializer(obj, data = request.data)
+        if serializer.is_valid():
+            editUser = serializer.save()
+            #data = serializer.data.post_id
+            payload = {
+                "code": 200,
+                "message": "ok",
+            }
+            return Response(payload)
+        return Response(serializer.errors)

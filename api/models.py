@@ -24,7 +24,7 @@ class Users(models.Model):
     province = models.CharField(max_length=30, blank=True, null=True)
     city = models.CharField(max_length=30, blank=True, null=True)
     language = models.CharField(max_length=30, blank=True, null=True)
-    deleted_user = models.IntegerField(blank=True, null=True)
+    deleted_user = models.IntegerField(default = 0) #make this change in mysql or do not pull data from db directly
 
     class Meta:
         managed = False
@@ -42,7 +42,7 @@ class Posts(models.Model):
     post_media_urls = JSONField(blank=True, null=True)  # This field type is a guess.
     post_like_num = models.IntegerField(blank=True, null=True)
     post_share_num = models.IntegerField(blank=True, null=True)
-    deleted = models.IntegerField(blank=True, null=True)
+    deleted = models.IntegerField(default = 0) #make this change in mysql or do not pull data from db directly
 
     class Meta:
         managed = False

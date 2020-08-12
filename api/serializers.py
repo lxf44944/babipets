@@ -80,3 +80,10 @@ class ShareSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actions
         fields = ['postId', 'activity_time', 'like', 'share', 'currentUserId']
+
+class DeletePostSerializer(serializers.ModelSerializer):
+    deleted = serializers.IntegerField(source = 'deleted')
+
+    class Meta:
+        model = Posts
+        fields = ['deleted']
