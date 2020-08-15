@@ -8,6 +8,24 @@
 from django.db import models
 from django_mysql.models import JSONField
 
+class Followandinvite(models.Model):
+    follow_id = models.BigAutoField(primary_key=True)
+    user_id = models.BigIntegerField()
+    follower_id = models.BigIntegerField()
+    follow_relationship = models.IntegerField(blank=True, null=True)
+    invite_relationship = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'followAndInvite'
+
+class Review(models.Model):
+    review = models.OneToOneField(Actions, models.DO_NOTHING, primary_key=True)
+    content = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'review'
 
 
 class Users(models.Model):
@@ -25,6 +43,7 @@ class Users(models.Model):
     city = models.CharField(max_length=30, blank=True, null=True)
     language = models.CharField(max_length=30, blank=True, null=True)
     deleted_user = models.IntegerField(default = 0) #make this change in mysql or do not pull data from db directly
+    posted = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -55,6 +74,7 @@ class Actions(models.Model):
     like = models.IntegerField(blank=True, null=True)
     share = models.IntegerField(blank=True, null=True)
     user = models.ForeignKey(Users, on_delete = models.CASCADE)
+    review = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False

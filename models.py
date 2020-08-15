@@ -9,15 +9,17 @@ from django.db import models
 
 
 class Actions(models.Model):
-    post_id = models.BigAutoField(primary_key=True)
+    action_id = models.BigAutoField(primary_key=True)
+    post = models.ForeignKey('Posts', models.DO_NOTHING)
     activity_time = models.DateTimeField(blank=True, null=True)
-    activity_type = models.IntegerField(blank=True, null=True)
-    user_id = models.BigIntegerField()
+    like = models.IntegerField(blank=True, null=True)
+    share = models.IntegerField(blank=True, null=True)
+    user = models.ForeignKey('Users', models.DO_NOTHING)
+    review = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'actions'
-        unique_together = (('post_id', 'user_id'),)
 
 
 class AuthGroup(models.Model):
@@ -130,11 +132,23 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class Followandinvite(models.Model):
+    follow_id = models.BigAutoField(primary_key=True)
+    user_id = models.BigIntegerField()
+    follower_id = models.BigIntegerField()
+    follow_relationship = models.IntegerField(blank=True, null=True)
+    invite_relationship = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'followAndInvite'
+
+
 class Posts(models.Model):
     post_id = models.BigAutoField(primary_key=True)
     create_time = models.DateTimeField(blank=True, null=True)
     update_time = models.DateTimeField(blank=True, null=True)
-    user_id = models.BigIntegerField(blank=True, null=True)
+    user = models.ForeignKey('Users', models.DO_NOTHING, blank=True, null=True)
     user_client = models.IntegerField(blank=True, null=True)
     post_desc = models.CharField(max_length=200, blank=True, null=True)
     post_media_type = models.IntegerField(blank=True, null=True)
@@ -146,6 +160,15 @@ class Posts(models.Model):
     class Meta:
         managed = False
         db_table = 'posts'
+
+
+class Review(models.Model):
+    review = models.OneToOneField(Actions, models.DO_NOTHING, primary_key=True)
+    content = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'review'
 
 
 class Users(models.Model):
@@ -163,6 +186,7 @@ class Users(models.Model):
     city = models.CharField(max_length=30, blank=True, null=True)
     language = models.CharField(max_length=30, blank=True, null=True)
     deleted_user = models.IntegerField(blank=True, null=True)
+    posted = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
