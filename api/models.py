@@ -8,26 +8,6 @@
 from django.db import models
 from django_mysql.models import JSONField
 
-class Followandinvite(models.Model):
-    follow_id = models.BigAutoField(primary_key=True)
-    user_id = models.BigIntegerField()
-    follower_id = models.BigIntegerField()
-    follow_relationship = models.IntegerField(blank=True, null=True)
-    invite_relationship = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'followAndInvite'
-
-class Review(models.Model):
-    review = models.OneToOneField(Actions, models.DO_NOTHING, primary_key=True)
-    content = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'review'
-
-
 class Users(models.Model):
     user_id = models.BigAutoField(primary_key=True)
     openid = models.CharField(max_length=200, blank=True, null=True)
@@ -74,8 +54,28 @@ class Actions(models.Model):
     like = models.IntegerField(blank=True, null=True)
     share = models.IntegerField(blank=True, null=True)
     user = models.ForeignKey(Users, on_delete = models.CASCADE)
-    review = models.IntegerField(blank=True, null=True)
+    comment = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'Actions'
+
+
+class Followandinvite(models.Model):
+    follow_id = models.BigAutoField(primary_key=True)
+    user_id = models.BigIntegerField()
+    follower_id = models.BigIntegerField()
+    follow_relationship = models.IntegerField(blank=True, null=True)
+    invite_relationship = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'followAndInvite'
+
+class Review(models.Model):
+    review = models.OneToOneField(Actions, models.DO_NOTHING, primary_key=True)
+    content = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'review'
