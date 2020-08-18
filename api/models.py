@@ -23,7 +23,7 @@ class Users(models.Model):
     city = models.CharField(max_length=30, blank=True, null=True)
     language = models.CharField(max_length=30, blank=True, null=True)
     deleted_user = models.IntegerField(default = 0) #make this change in mysql or do not pull data from db directly
-    posted = models.IntegerField(blank=True, null=True)
+    posted = models.IntegerField(default = 0, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -73,7 +73,7 @@ class Followandinvite(models.Model):
         db_table = 'followAndInvite'
 
 class Review(models.Model):
-    review = models.OneToOneField(Actions, models.DO_NOTHING, primary_key=True)
+    review = models.OneToOneField(Actions, on_delete = models.CASCADE, primary_key=True)
     content = models.TextField(blank=True, null=True)
 
     class Meta:

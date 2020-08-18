@@ -69,6 +69,9 @@ class add(APIView):
         serializer = CreateSerializer(data = request.data)
         if serializer.is_valid():
             new = serializer.save()
+            user = Users.filter(user_id = new.user)
+            if user.posted == 0:
+                user.update(posted, 1)
             #data = serializer.data.post_id
             payload = {
                 "code": 200,
@@ -115,7 +118,8 @@ class login(APIView):
                         "UserHeadUrl":newUser.avatar_url,
                         "UserName":newUser.nickname,
                         "UserGender":newUser.gender,
-                        "UserDesc":newUser.user_desc
+                        "UserDesc":newUser.user_desc,
+                        "Posted":newUser.posted
                     }
                 }
             }
