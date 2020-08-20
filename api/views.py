@@ -1,6 +1,6 @@
 from rest_framework.generics import GenericAPIView
 from chongbao.pagination import CustomPagination
-from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer, LikeSerializer, ShareSerializer, DeletePostSerializer
+from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer, LikeSerializer, ShareSerializer, DeletePostSerializer, RewardSerializer
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView, View
@@ -11,6 +11,7 @@ from .models import Posts, Users, Actions
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.http import HttpResponseBadRequest
+from django.db.models import Sum
 
 from demo.sts_demo import getKey
 import os
@@ -225,9 +226,53 @@ class SilenceGetOpenId(View):
 class Delete(APIView):
     def post(self, request):
         obj = Posts.objects.get(post_id=request.data['postId'])
-        serializer = DelatePostSerializer(obj, data = request.data)
+        serializer = DeletePostSerializer(obj, data = request.data)
         if serializer.is_valid():
             editUser = serializer.save()
+            #data = serializer.data.post_id
+            payload = {
+                "code": 200,
+                "message": "ok",
+            }
+            return Response(payload)
+        return Response(serializer.errors)
+
+#return activity number for given user:
+class Activity(GenericAPIView):
+    def get(self, request):
+        postNum = Posts.objects.filter(user=request.data['userId']).count()
+        commentNum = Actions.objects.filter(user=request.data['userId'], comment=1).count()
+        likeNum = Actions.objects.filter(user=request.data['userId'], like=1).count()
+        followNum = Followandinvite.objects.filter(follower_id=request.data['userId'], follow_relationship=1).count()
+        usersPosts = Posts.objects.filter(user=request.data['userId'])
+        commentNum = Actions.objects.filter(post=usersPosts.post_id, comment=1).count()
+        #still need reward given number
+        activityNum = postNum + commentNum + likeNum + followNum
+
+        payload = {
+            "code": 200,
+            "message": "ok",
+            "activity": activityNum,
+        }
+        return Response(payload)
+
+class LikeNumber(GenericAPIView):
+    def get(self, request):
+        usersPosts = Posts.objects.filter(user=request.data['userId'])
+        likeNum = Actions.objects.filter(post=userPosts.post_id, like=1).count()
+
+        payload = {
+            "code": 200,
+            "message": "ok",
+            "like": likeNum,
+        }
+        return Response(payload)
+
+class Reward(APIView):
+    def post(self, request):
+        serializer = RewardSerializer(data = request.data)
+        if serializer.is_valid():
+            newReward = serializer.save()
             #data = serializer.data.post_id
             payload = {
                 "code": 200,

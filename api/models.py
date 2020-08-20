@@ -67,6 +67,7 @@ class Followandinvite(models.Model):
     follower_id = models.BigIntegerField()
     follow_relationship = models.IntegerField(blank=True, null=True)
     invite_relationship = models.IntegerField(blank=True, null=True)
+    #test_field = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -79,3 +80,14 @@ class Review(models.Model):
     class Meta:
         managed = False
         db_table = 'review'
+
+class Reward(models.Model):
+    reward_id = models.BigAutoField(primary_key=True)
+    receiver = models.BigIntegerField()
+    type = models.IntegerField()
+    amount = models.IntegerField()
+    offer_user_id = models.BigIntegerField()
+
+    class Meta:
+        managed = False
+        db_table = "reward"

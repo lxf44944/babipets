@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import Posts, Users, Actions
+from .models import Posts, Users, Actions, Followandinvite, Review, Reward
 import datetime
 
 class PostsSerializer(serializers.ModelSerializer):
@@ -87,3 +87,13 @@ class DeletePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Posts
         fields = ['deleted']
+
+class RewardSerializer(serializers.ModelSerializer):
+    receiving_end = serializers.IntegerField(source = 'receiver')
+    type_of_reward = serializers.IntegerField(source = 'type')
+    reward_amount = serializers.IntegerField(source = 'amount')
+    offering_end = serializers.IntegerField(source = 'offer_user_id')
+
+    class Meta:
+        model = Reward
+        fields = ['receiving_end', 'type_of_reward', 'reward_amount', 'offering_end']
