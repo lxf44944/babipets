@@ -1,20 +1,27 @@
 from rest_framework.generics import GenericAPIView
 from chongbao.pagination import CustomPagination
-from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer, LikeSerializer, ShareSerializer, DeletePostSerializer, RewardSerializer
+from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer, LikeSerializer, ShareSerializer, DeletePostSerializer, RewardSerializer, BalanceSerializer
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView, View
 
 
 
-from .models import Posts, Users, Actions
+from .models import Posts, Users, Actions, Balance
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.http import HttpResponseBadRequest
 from django.db.models import Sum
 
+
+
+from rest_framework import permissions, status, viewsets
+from rest_framework.permissions import AllowAny
+
 from demo.sts_demo import getKey
 import os
+
+
 
 class List(GenericAPIView):
     serializer_class = PostsSerializer
@@ -280,3 +287,30 @@ class Reward(APIView):
             }
             return Response(payload)
         return Response(serializer.errors)
+
+class CheckInViewSet(viewsets.GenericViewSet):
+    queryset = Users.objects.all()
+    permission_classes = [AllowAny, ]
+
+    @action(
+        methods=['post'],
+        detail=True,
+        permission_classes=[permissions.IsAuthenticated, OncePerDay, IsCurrentUser]
+    )
+    def checkin(self, request, pk=None):
+        user = self.get_queryset()
+
+        random_amount = abs(random.gauss(10, 5)) #need to change this amount to one that we decide
+        random_amount = math.ceil(random_amount)
+
+        if random_amount == 0:
+            random_amount += 1
+
+        balance = Balance.objects.create(
+            reward_type=0,
+            coin_type=2,
+            amount=random_amount,
+            user=user
+        )
+        serializer = BalanceSerializer(balance)
+        return Response(serializer.data, status=status.HTTP_201_CREATED) # post this change of output to shimo

@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.conf import settings
 from django_mysql.models import JSONField
 
 class Users(models.Model):
@@ -91,3 +92,27 @@ class Reward(models.Model):
     class Meta:
         managed = False
         db_table = "reward"
+
+class Balance(models.Model):
+    REWARD_TYPE = (
+        (0, 'check_in_reward'),
+    )
+
+    COIN_TYPE = (
+        (0, 'gold'),
+        (1, 'silver'),
+        (2, 'bronze'),
+    )
+
+    created_time = models.DateTimeField("time_created", auto_now_add = True)
+    reward_type = models.IntegerField("type_of_reward", choices = REWARD_TYPE)
+    coin_type = models.IntegerField("type_of_coins", choices = COIN_TYPE)
+    amount = models.PositiveIntegerField("amount_of_reward")
+    user = models.ForeignKey(Users, verbose_name = "user")
+
+    class Meta:
+        verbose_name = "reward_record"
+        verbose_name_plural = "reward_record"
+
+    def __str__(self):
+        return '%s:%s:%s -> %s' % (self.reward_type, self.coin_type, self.amount, self.user)

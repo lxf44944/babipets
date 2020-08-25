@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import Posts, Users, Actions, Followandinvite, Review, Reward
+from .models import Posts, Users, Actions, Followandinvite, Review, Reward, Balance
 import datetime
 
 class PostsSerializer(serializers.ModelSerializer):
@@ -97,3 +97,19 @@ class RewardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reward
         fields = ['receiving_end', 'type_of_reward', 'reward_amount', 'offering_end']
+
+class BalanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Balance
+        fields = (
+            'reward_type',
+            'coin_type',
+            'amount',
+            'user',
+        )
+        read_only_fields = (
+            'reward_type',
+            'coin_type',
+            'amount',
+            'user',
+        )
