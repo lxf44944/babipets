@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import include, url
 from rest_framework.urlpatterns import format_suffix_patterns
 from api import views
 #from api.views import CheckInViewSet
@@ -6,7 +6,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('users', CheckInViewSet) #need to confirm
+router.register(r'users', CheckInViewSet) #need to confirm
 
 urlpatterns = [
     path('home/list.json', views.List.as_view(), name = 'list'),
@@ -22,6 +22,7 @@ urlpatterns = [
     path('post/like.json', views.like.as_view(), name = 'like'),
     path('post/share.json', views.share.as_view(), name = 'share'),
     path('post/reward.json', views.Reward.as_view(), name = 'reward'),
-    path('post/checkin.json', include(router.urls)), #need to confirm
+    #path('post/checkin.json', include(router.urls)), #need to confirm
+    url(r'^', include(router.urls)),
     path('get/openid/', views.SilenceGetOpenId.as_view(), name = 'get_openid'),
 ]

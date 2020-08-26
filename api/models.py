@@ -108,7 +108,7 @@ class Balance(models.Model):
     reward_type = models.IntegerField("type_of_reward", choices = REWARD_TYPE)
     coin_type = models.IntegerField("type_of_coins", choices = COIN_TYPE)
     amount = models.PositiveIntegerField("amount_of_reward")
-    user = models.ForeignKey(Users, verbose_name = "user")
+    user = models.ForeignKey(Users, on_delete = models.CASCADE, verbose_name = "user") 
 
     class Meta:
         verbose_name = "reward_record"
