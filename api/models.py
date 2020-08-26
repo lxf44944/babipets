@@ -10,12 +10,12 @@ from django.conf import settings
 from django_mysql.models import JSONField
 
 class Users(models.Model):
-    user_id = models.BigAutoField(primary_key=True)
+    user_id = models.BigAutoField(max_length=20, primary_key=True, null = False)
     openid = models.CharField(max_length=200, blank=True, null=True)
     nickname = models.CharField(max_length=20, blank=True, null=True)
-    avatar_url = models.CharField(max_length=200,blank=True, null=True)
-    gender = models.IntegerField(blank=True, null=True)
-    user_client = models.IntegerField(blank=True, null=True)
+    avatar_url = models.CharField(max_length=60,blank=True, null=True)
+    gender = models.IntegerField(max_length=10, blank=True, null=True)
+    user_client = models.IntegerField(max_length=10, blank=True, null=True)
     user_desc = models.CharField(max_length=200, blank=True, null=True)
     create_time = models.DateTimeField(blank=True, null=True)
     update_time = models.DateTimeField(blank=True, null=True)
@@ -32,7 +32,7 @@ class Users(models.Model):
 
 
 class Posts(models.Model):
-    post_id = models.BigAutoField(primary_key=True)
+    post_id = models.BigAutoField(max_length=20, primary_key=True, null = False)
     create_time = models.DateTimeField(blank=True, null=True)
     update_time = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(Users, on_delete = models.CASCADE)
@@ -64,8 +64,8 @@ class Actions(models.Model):
 
 class Followandinvite(models.Model):
     follow_id = models.BigAutoField(primary_key=True)
-    user_id = models.BigIntegerField()
-    follower_id = models.BigIntegerField()
+    user_id = models.BigIntegerField(max_length=20, null = False)
+    follower_id = models.BigIntegerField(max_length=20, null = False)
     follow_relationship = models.IntegerField(blank=True, null=True)
     invite_relationship = models.IntegerField(blank=True, null=True)
     #test_field = models.IntegerField(blank=True, null=True)
@@ -84,10 +84,10 @@ class Review(models.Model):
 
 class Reward(models.Model):
     reward_id = models.BigAutoField(primary_key=True)
-    receiver = models.BigIntegerField()
+    receiver = models.BigIntegerField(max_length=20, null = False)
     type = models.IntegerField()
     amount = models.IntegerField()
-    offer_user_id = models.BigIntegerField()
+    offer_user_id = models.BigIntegerField(max_length=20, null = False)
 
     class Meta:
         managed = False
@@ -108,7 +108,7 @@ class Balance(models.Model):
     reward_type = models.IntegerField("type_of_reward", choices = REWARD_TYPE)
     coin_type = models.IntegerField("type_of_coins", choices = COIN_TYPE)
     amount = models.PositiveIntegerField("amount_of_reward")
-    user = models.ForeignKey(Users, on_delete = models.CASCADE, verbose_name = "user") 
+    user = models.ForeignKey(Users, on_delete = models.CASCADE, verbose_name = "user")
 
     class Meta:
         verbose_name = "reward_record"
