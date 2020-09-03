@@ -81,12 +81,12 @@ class ShareSerializer(serializers.ModelSerializer):
         model = Actions
         fields = ['postId', 'activity_time', 'like', 'share', 'currentUserId']
 
-class DeletePostSerializer(serializers.ModelSerializer):
-    deleted = serializers.IntegerField(source = 'deleted')
+class UpdatePostSerializer(serializers.ModelSerializer):
+    status = serializers.IntegerField(source = 'status')
 
     class Meta:
         model = Posts
-        fields = ['deleted']
+        fields = ['status']
 
 class RewardSerializer(serializers.ModelSerializer):
     receiving_end = serializers.IntegerField(source = 'receiver')

@@ -1,6 +1,6 @@
 from django.utils import timezone
 from rest_framework import permissions
-from models import Balance
+from .models import Balance
 
 class OncePerDay(permissions.BasePermission):
     """

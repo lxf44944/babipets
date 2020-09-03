@@ -27,7 +27,6 @@ class Users(models.Model):
     posted = models.IntegerField(default = 0, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'Users'
 
 
@@ -42,10 +41,9 @@ class Posts(models.Model):
     post_media_urls = JSONField(blank=True, null=True)  # This field type is a guess.
     post_like_num = models.IntegerField(blank=True, null=True)
     post_share_num = models.IntegerField(blank=True, null=True)
-    deleted = models.IntegerField(default = 0) #make this change in mysql or do not pull data from db directly
+    status = models.IntegerField(default = 0) #make this change in mysql or do not pull data from db directly
 
     class Meta:
-        managed = False
         db_table = 'Posts'
 
 class Actions(models.Model):
@@ -58,7 +56,6 @@ class Actions(models.Model):
     comment = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'Actions'
 
 
@@ -71,7 +68,6 @@ class Followandinvite(models.Model):
     #test_field = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'followAndInvite'
 
 class Review(models.Model):
@@ -79,7 +75,6 @@ class Review(models.Model):
     content = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'review'
 
 class Reward(models.Model):
@@ -90,7 +85,6 @@ class Reward(models.Model):
     offer_user_id = models.BigIntegerField(max_length=20, null = False)
 
     class Meta:
-        managed = False
         db_table = "reward"
 
 class Balance(models.Model):
@@ -113,6 +107,7 @@ class Balance(models.Model):
     class Meta:
         verbose_name = "reward_record"
         verbose_name_plural = "reward_record"
+        db_table = "balance"
 
     def __str__(self):
         return '%s:%s:%s -> %s' % (self.reward_type, self.coin_type, self.amount, self.user)

@@ -1,6 +1,6 @@
 from rest_framework.generics import GenericAPIView
 from chongbao.pagination import CustomPagination
-from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer, LikeSerializer, ShareSerializer, DeletePostSerializer, RewardSerializer, BalanceSerializer
+from .serializers import PostsSerializer, CreateSerializer, UserSerializer, EditUserSerializer, LikeSerializer, ShareSerializer, UpdatePostSerializer, RewardSerializer, BalanceSerializer
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView, View
@@ -230,7 +230,7 @@ class SilenceGetOpenId(View):
 
 #V0.2.1 Starts here:
 #Delete post API:
-class Delete(APIView):
+class Update(APIView):
     def post(self, request):
         obj = Posts.objects.get(post_id=request.data['postId'])
         serializer = DeletePostSerializer(obj, data = request.data)
@@ -253,7 +253,7 @@ class Activity(GenericAPIView):
         followNum = Followandinvite.objects.filter(follower_id=request.data['userId'], follow_relationship=1).count()
         usersPosts = Posts.objects.filter(user=request.data['userId'])
         commentNum = Actions.objects.filter(post=usersPosts.post_id, comment=1).count()
-        #still need reward given number
+    
         activityNum = postNum + commentNum + likeNum + followNum
 
         payload = {
