@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import Posts, Users, Actions, Followandinvite, Review, Reward, Balance
+from .models import Post, User, Action, Followandinvite, Review, Reward, Balance
 import datetime
 
 class PostsSerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class PostsSerializer(serializers.ModelSerializer):
     PostShareNum = serializers.ReadOnlyField(source='post_share_num')
 
     class Meta:
-        model = Posts
+        model = Post
         fields = ['UserId', 'UserHeadUrl', 'UserName', 'UserGender', 'PostId', 'PostDesc', 'PostMediaType',
                   'PostMediaUrls', 'PostLikeNum', 'PostShareNum']
 
@@ -31,7 +31,7 @@ class CreateSerializer(serializers.ModelSerializer):
     userClient = serializers.IntegerField(source = 'user_client')
 
     class Meta:
-        model = Posts
+        model = Post
         fields = ['postDesc', 'postMediaType', 'postMediaUrls', 'currentUserId', 'userClient']
 
 class UserSerializer(serializers.ModelSerializer):
@@ -46,7 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
     userClient = serializers.IntegerField(source = 'user_client')
 
     class Meta:
-        model = Users
+        model = User
         fields = ['openId', 'nickName', 'avatarUrl', 'gender', 'country', 'province', 'city', 'language', 'userClient']
 
 class EditUserSerializer(serializers.ModelSerializer):
@@ -56,7 +56,7 @@ class EditUserSerializer(serializers.ModelSerializer):
     userClient = serializers.IntegerField(source = 'user_client')
 
     class Meta:
-        model = Users
+        model = User
         fields = ['userDesc', 'currentUserId', 'userClient']
 
 class LikeSerializer(serializers.ModelSerializer):
@@ -67,7 +67,7 @@ class LikeSerializer(serializers.ModelSerializer):
     currentUserId = serializers.IntegerField(source = 'user_id')
 
     class Meta:
-        model = Actions
+        model = Action
         fields = ['postId', 'activity_time', 'like', 'share', 'currentUserId']
 
 class ShareSerializer(serializers.ModelSerializer):
@@ -78,14 +78,14 @@ class ShareSerializer(serializers.ModelSerializer):
     currentUserId = serializers.IntegerField(source = 'user_id')
 
     class Meta:
-        model = Actions
+        model = Action
         fields = ['postId', 'activity_time', 'like', 'share', 'currentUserId']
 
 class UpdatePostSerializer(serializers.ModelSerializer):
     status = serializers.IntegerField(source = 'status')
 
     class Meta:
-        model = Posts
+        model = Post
         fields = ['status']
 
 class RewardSerializer(serializers.ModelSerializer):

@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Users, Posts, Actions, Review, Followandinvite, Reward, Balance
+from .models import User, Post, Action, Review, Followandinvite, Reward, Balance
 # Register your models here.
-admin.site.register(Posts)
-admin.site.register(Users)
-admin.site.register(Actions)
+admin.site.register(Post)
+admin.site.register(User)
+admin.site.register(Action)
 admin.site.register(Followandinvite)
 admin.site.register(Review)
 admin.site.register(Reward)

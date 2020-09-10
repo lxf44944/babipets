@@ -9,7 +9,7 @@ from django.db import models
 from django.conf import settings
 from django_mysql.models import JSONField
 
-class Users(models.Model):
+class User(models.Model):
     user_id = models.BigAutoField(max_length=20, primary_key=True, null = False)
     openid = models.CharField(max_length=200, blank=True, null=True)
     nickname = models.CharField(max_length=20, blank=True, null=True)
@@ -30,11 +30,11 @@ class Users(models.Model):
         db_table = 'Users'
 
 
-class Posts(models.Model):
+class Post(models.Model):
     post_id = models.BigAutoField(max_length=20, primary_key=True, null = False)
     create_time = models.DateTimeField(blank=True, null=True)
     update_time = models.DateTimeField(blank=True, null=True)
-    user = models.ForeignKey(Users, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
     user_client = models.IntegerField(blank=True, null=True)
     post_desc = models.CharField(max_length=200, blank=True, null=True)
     post_media_type = models.IntegerField(blank=True, null=True)
@@ -46,13 +46,13 @@ class Posts(models.Model):
     class Meta:
         db_table = 'Posts'
 
-class Actions(models.Model):
+class Action(models.Model):
     action_id = models.BigAutoField(primary_key=True)
-    post = models.ForeignKey(Posts, on_delete = models.CASCADE)
+    post = models.ForeignKey(Post, on_delete = models.CASCADE)
     activity_time = models.DateTimeField(blank=True, null=True)
     like = models.IntegerField(blank=True, null=True)
     share = models.IntegerField(blank=True, null=True)
-    user = models.ForeignKey(Users, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
     comment = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -71,7 +71,7 @@ class Followandinvite(models.Model):
         db_table = 'followAndInvite'
 
 class Review(models.Model):
-    review = models.OneToOneField(Actions, on_delete = models.CASCADE, primary_key=True)
+    review = models.OneToOneField(Action, on_delete = models.CASCADE, primary_key=True)
     content = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -102,7 +102,7 @@ class Balance(models.Model):
     reward_type = models.IntegerField("type_of_reward", choices = REWARD_TYPE)
     coin_type = models.IntegerField("type_of_coins", choices = COIN_TYPE)
     amount = models.PositiveIntegerField("amount_of_reward")
-    user = models.ForeignKey(Users, on_delete = models.CASCADE, verbose_name = "user")
+    user = models.ForeignKey(User, on_delete = models.CASCADE, verbose_name = "user")
 
     class Meta:
         verbose_name = "reward_record"

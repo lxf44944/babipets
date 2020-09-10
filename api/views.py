@@ -7,7 +7,7 @@ from rest_framework.views import APIView, View
 
 
 
-from .models import Posts, Users, Actions, Balance
+from .models import Post, User, Action, Balance
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.http import HttpResponseBadRequest
@@ -25,7 +25,7 @@ import os
 
 class List(GenericAPIView):
     serializer_class = PostsSerializer
-    queryset = Posts.objects.all()
+    queryset = Post.objects.all()
     pagination_class = CustomPagination
     permission_classes = (permissions.AllowAny,)
     http_method_names = ['get', 'head']
@@ -52,7 +52,7 @@ class List(GenericAPIView):
 
 class Info(GenericAPIView):
     serializer_class = PostsSerializer
-    queryset = Posts.objects.all()
+    queryset = Post.objects.all()
     def get(self, request):
         def filter_queryset(queryset):
             queryset = queryset.filter(deleted = 0)
@@ -77,7 +77,7 @@ class add(APIView):
         serializer = CreateSerializer(data = request.data)
         if serializer.is_valid():
             new = serializer.save()
-            user = Users.filter(user_id = new.user)
+            user = User.objects.filter(user_id = new.user)
             if user.posted == 0:
                 user.update(posted, 1)
             #data = serializer.data.post_id
@@ -136,7 +136,7 @@ class login(APIView):
 
 class edit(APIView):
     def post(self, request):
-        obj = Users.objects.get(user_id=request.data['currentUserId'])
+        obj = User.objects.get(user_id=request.data['currentUserId'])
         serializer = EditUserSerializer(obj, data = request.data)
         if serializer.is_valid():
             editUser = serializer.save()
@@ -150,7 +150,7 @@ class edit(APIView):
 
 class history(GenericAPIView):
     serializer_class = PostsSerializer
-    queryset = Posts.objects.all()
+    queryset = Post.objects.all()
     pagination_class = CustomPagination
     permission_classes = (permissions.AllowAny,)
     http_method_names = ['get', 'head']
@@ -232,7 +232,7 @@ class SilenceGetOpenId(View):
 #Delete post API:
 class Update(APIView):
     def post(self, request):
-        obj = Posts.objects.get(post_id=request.data['postId'])
+        obj = Post.objects.get(post_id=request.data['postId'])
         serializer = DeletePostSerializer(obj, data = request.data)
         if serializer.is_valid():
             editUser = serializer.save()
@@ -247,13 +247,13 @@ class Update(APIView):
 #return activity number for given user:
 class Activity(GenericAPIView):
     def get(self, request):
-        postNum = Posts.objects.filter(user=request.data['userId']).count()
-        commentNum = Actions.objects.filter(user=request.data['userId'], comment=1).count()
-        likeNum = Actions.objects.filter(user=request.data['userId'], like=1).count()
+        postNum = Post.objects.filter(user=request.data['userId']).count()
+        commentNum = Action.objects.filter(user=request.data['userId'], comment=1).count()
+        likeNum = Action.objects.filter(user=request.data['userId'], like=1).count()
         followNum = Followandinvite.objects.filter(follower_id=request.data['userId'], follow_relationship=1).count()
-        usersPosts = Posts.objects.filter(user=request.data['userId'])
-        commentNum = Actions.objects.filter(post=usersPosts.post_id, comment=1).count()
-    
+        usersPosts = Post.objects.filter(user=request.data['userId'])
+        commentNum = Action.objects.filter(post=usersPosts.post_id, comment=1).count()
+
         activityNum = postNum + commentNum + likeNum + followNum
 
         payload = {
@@ -265,8 +265,8 @@ class Activity(GenericAPIView):
 
 class LikeNumber(GenericAPIView):
     def get(self, request):
-        usersPosts = Posts.objects.filter(user=request.data['userId'])
-        likeNum = Actions.objects.filter(post=userPosts.post_id, like=1).count()
+        usersPosts = Post.objects.filter(user=request.data['userId'])
+        likeNum = Action.objects.filter(post=userPosts.post_id, like=1).count()
 
         payload = {
             "code": 200,
@@ -289,7 +289,7 @@ class Reward(APIView):
         return Response(serializer.errors)
 
 class CheckInViewSet(viewsets.GenericViewSet):
-    queryset = Users.objects.all()
+    queryset = User.objects.all()
     permission_classes = [AllowAny, ]
 
     @action(
