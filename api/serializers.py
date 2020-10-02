@@ -16,6 +16,7 @@ class PostsSerializer(serializers.ModelSerializer):
     PostMediaUrls = serializers.JSONField(source='post_media_urls')
     PostLikeNum = serializers.ReadOnlyField(source='post_like_num')
     PostShareNum = serializers.ReadOnlyField(source='post_share_num')
+    #deleted = serializers.ReadOnlyField(source='deleted')
 
     class Meta:
         model = Post

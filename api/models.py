@@ -42,6 +42,7 @@ class Post(models.Model):
     post_like_num = models.IntegerField(blank=True, null=True)
     post_share_num = models.IntegerField(blank=True, null=True)
     status = models.IntegerField(default = 0) #make this change in mysql or do not pull data from db directly
+    #deleted = models.IntegerField(default = 0)
 
     class Meta:
         db_table = 'Posts'

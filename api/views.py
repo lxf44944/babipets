@@ -52,23 +52,24 @@ class List(GenericAPIView):
 
 class Info(GenericAPIView):
     serializer_class = PostsSerializer
-    queryset = Post.objects.all()
+
     def get(self, request):
-        def filter_queryset(queryset):
-            queryset = queryset.filter(deleted = 0)
-            return queryset.filter(pk = request.query_params.get('postId'))
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = Post.objects.filter(post_id = request.GET.get('postId'))
+        #print(request.data.get('postId'))
+        #queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many = True)
+
         data = serializer.data
+        #data = request.GET.get('postId')
 
         payload = {
             'code': 200,
             'message': 'ok',
             'data':{
-                #'Item':data
+                'Item':data
             }
         }
-        payload['data']['item'] = data
+        #payload['data']['item'] = request.data.get('postId')
 
         return Response(payload)
 
@@ -188,6 +189,7 @@ class like(APIView):
             }
             return Response(payload)
         return Response(serializer.errors)
+
 
 class share(APIView):
     def post(self, request):
